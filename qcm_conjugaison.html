@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Conjugaison</title>
+    <style>
+        :root {
+            --primary: #16a34a;
+            --primary-dark: #166534;
+            --primary-light: #dcfce7;
+            --accent: #0ea5e9;
+            --accent-light: #e0f2fe;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --text: #102018;
+            --muted: #667085;
+            --card: rgba(255, 255, 255, 0.92);
+            --border: rgba(22, 101, 52, 0.14);
+            --shadow: 0 24px 70px rgba(15, 23, 42, 0.16);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 34px 18px;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(34, 197, 94, 0.20), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.18), transparent 32%),
+                linear-gradient(135deg, #f8fff9 0%, #eef8ff 100%);
+        }
+
+        .container {
+            position: relative;
+            overflow: hidden;
+            background: var(--card);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(14px);
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 7px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 28px 18px;
+            border-radius: 22px;
+            background:
+                linear-gradient(135deg, rgba(220, 252, 231, 0.94), rgba(224, 242, 254, 0.78)),
+                #ffffff;
+            border: 1px solid var(--border);
+        }
+
+        .header h1 {
+            color: var(--primary-dark);
+            margin: 0 0 12px;
+            font-size: clamp(30px, 5vw, 48px);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .header h1::after {
+            content: "";
+            display: block;
+            width: 86px;
+            height: 4px;
+            margin: 12px auto 0;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .header-info {
+            display: inline-block;
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.7;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        #quiz {
+            display: grid;
+            gap: 18px;
+        }
+
+        .question {
+            position: relative;
+            margin-bottom: 0;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: linear-gradient(180deg, #ffffff, #fbfffc);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 38px rgba(15, 23, 42, 0.10);
+            border-color: rgba(22, 163, 74, 0.35);
+        }
+
+        .question > div:first-child {
+            font-size: 18px;
+            line-height: 1.5;
+            padding-right: 6px;
+        }
+
+        .question strong {
+            display: inline-block;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 5px 10px;
+            margin-right: 6px;
+            border-radius: 999px;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .options {
+            margin: 16px 0 2px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            min-height: 52px;
+            margin: 0;
+            padding: 13px 14px;
+            cursor: pointer;
+            border: 1px solid rgba(15, 23, 42, 0.10);
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .options label:hover {
+            background: var(--primary-light);
+            border-color: rgba(22, 163, 74, 0.38);
+            transform: translateY(-1px);
+        }
+
+        .options label:has(input:checked) {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            border-color: rgba(22, 163, 74, 0.55);
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.10);
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            transform: scale(1.15);
+            margin-right: 12px;
+            accent-color: var(--primary);
+            flex: 0 0 auto;
+        }
+
+        .options label:has(input:disabled) {
+            cursor: default;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 13px 15px;
+            display: none;
+            font-size: 16px;
+            border-radius: 14px;
+            line-height: 1.55;
+            font-weight: 650;
+        }
+
+        .correct {
+            background: linear-gradient(135deg, var(--primary-light), #f0fdf4);
+            color: var(--primary-dark);
+            border: 1px solid rgba(22, 163, 74, 0.28);
+        }
+
+        .incorrect {
+            background: linear-gradient(135deg, var(--danger-light), #fff7f7);
+            color: var(--danger);
+            border: 1px solid rgba(220, 38, 38, 0.22);
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 24px;
+            margin: 24px 8px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 12px 24px rgba(22, 163, 74, 0.24);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(22, 163, 74, 0.30);
+            filter: brightness(1.03);
+        }
+
+        button:active { transform: translateY(0); }
+
+        button:nth-of-type(2) {
+            background: linear-gradient(135deg, #334155, #0f172a);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.20);
+        }
+
+        #score {
+            font-size: 23px;
+            font-weight: 900;
+            margin-top: 24px;
+            text-align: center;
+            color: var(--primary-dark);
+            padding: 16px;
+            border-radius: 18px;
+        }
+
+        #score:not(:empty) {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 16px 10px;
+            }
+
+            .container {
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .header {
+                padding: 22px 12px;
+                border-radius: 18px;
+            }
+
+            .header-info {
+                border-radius: 16px;
+            }
+
+            .question {
+                padding: 16px;
+            }
+
+            .question > div:first-child {
+                font-size: 16.5px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .options label {
+                min-height: 54px;
+                font-size: 17px;
+            }
+
+            button {
+                width: 100%;
+                margin: 10px 0 0;
+                padding: 16px;
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>QCM CONJUGAISON</h1>
+            <div class="header-info">
+                Réalisé par le Prof : Mohamed BAJJOU<br>
+                École : ezzaytouna s/s ferricha<br>
+                TAOUNATE
+            </div>
+        </div>
+        <div id="quiz"></div>
+        <button onclick="calculateScore()">Soumettre les réponses</button>
+        <button onclick="resetQuiz()">Réinitialiser</button>
+        <div id="score"></div>
+    </div>
+
+    <script>
+        // Liste complète des questions
+        const questions = [
+            // 4 verbes du 1er groupe
+            {
+                question: "Nous (manger) une pomme. Quelle est la bonne conjugaison ?",
+                options: ["mange", "manges", "mangeons", "mangent"],
+                correct: 2,
+                explanation: "'Nous mangeons' est la forme correcte au présent. Avec nous, on ajoute -ons."
+            },
+            {
+                question: "Je (parler) avec mon ami. Quelle est la bonne conjugaison ?",
+                options: ["parles", "parle", "parlons", "parlent"],
+                correct: 1,
+                explanation: "'Je parle' est la forme correcte au présent pour le verbe parler."
+            },
+            {
+                question: "Tu (jouer) dans la cour. Quelle est la bonne conjugaison ?",
+                options: ["joue", "joues", "jouons", "jouent"],
+                correct: 1,
+                explanation: "'Tu joues' est la forme correcte au présent. Avec tu, on ajoute -es."
+            },
+            {
+                question: "Ils (chanter) une chanson. Quelle est la bonne conjugaison ?",
+                options: ["chante", "chantes", "chantons", "chantent"],
+                correct: 3,
+                explanation: "'Ils chantent' est la forme correcte au présent. Avec ils, on ajoute -ent."
+            },
+
+            // 3 verbes du 2ème groupe demandés
+            {
+                question: "Vous (finir) vos exercices. Quelle est la bonne conjugaison ?",
+                options: ["finis", "finit", "finissez", "finissent"],
+                correct: 2,
+                explanation: "'Vous finissez' est la forme correcte au présent pour le verbe finir."
+            },
+            {
+                question: "Je (remplir) la bouteille. Quelle est la bonne conjugaison ?",
+                options: ["remplis", "remplit", "remplissons", "remplissez"],
+                correct: 0,
+                explanation: "'Je remplis' est la forme correcte au présent pour le verbe remplir."
+            },
+            {
+                question: "Nous (partir) à l'école. Quelle est la bonne conjugaison ?",
+                options: ["pars", "part", "partons", "partent"],
+                correct: 2,
+                explanation: "'Nous partons' est la forme correcte au présent pour le verbe partir."
+            },
+
+            // 3 verbes du 3ème groupe demandés
+            {
+                question: "Elle (faire) son devoir. Quelle est la bonne conjugaison ?",
+                options: ["fais", "fait", "faisons", "font"],
+                correct: 1,
+                explanation: "'Elle fait' est la forme correcte au présent pour le verbe faire."
+            },
+            {
+                question: "Vous (dire) la vérité. Quelle est la bonne conjugaison ?",
+                options: ["dis", "dit", "dites", "disent"],
+                correct: 2,
+                explanation: "'Vous dites' est la forme correcte au présent pour le verbe dire."
+            },
+            {
+                question: "Ils (écrire) une lettre. Quelle est la bonne conjugaison ?",
+                options: ["écris", "écrit", "écrivez", "écrivent"],
+                correct: 3,
+                explanation: "'Ils écrivent' est la forme correcte au présent pour le verbe écrire."
+            }
+        ];
+
+        let displayedQuestions = [...questions];
+
+        function shuffleQuestions() {
+            for (let i = displayedQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [displayedQuestions[i], displayedQuestions[j]] = [displayedQuestions[j], displayedQuestions[i]];
+            }
+        }
+
+        function initQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+
+            displayedQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div><strong>Question ${index + 1}:</strong> ${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${i}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${index}"></div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const questionOptions = this.closest('.question').querySelectorAll('input[type="radio"]');
+                    questionOptions.forEach(opt => opt.disabled = true);
+                    showFeedback(this);
+                });
+            });
+        }
+
+        function showFeedback(selected) {
+            const questionIndex = selected.name.replace('q', '');
+            const feedbackDiv = document.getElementById(`feedback${questionIndex}`);
+            const q = displayedQuestions[questionIndex];
+            
+            feedbackDiv.className = selected.value == q.correct ? 
+                'feedback correct' : 'feedback incorrect';
+                
+            feedbackDiv.innerHTML = (selected.value == q.correct ? 
+                "✓ Correct ! " : "✗ Incorrect. ") + q.explanation;
+            
+            feedbackDiv.style.display = 'block';
+        }
+
+        function calculateScore() {
+            let score = 0;
+            displayedQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if(selected && selected.value == q.correct) score++;
+            });
+            document.getElementById('score').innerHTML = `Score final : ${score}/${displayedQuestions.length}`;
+        }
+
+        function resetQuiz() {
+            document.getElementById('score').innerHTML = '';
+            displayedQuestions = [...questions];
+            shuffleQuestions();
+            initQuiz();
+        }
+
+        window.onload = function() {
+            shuffleQuestions();
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
